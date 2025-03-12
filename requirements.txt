@@ -5,5 +5,6 @@ PyPDF2
 python-docx
 groq
 TTS
+torchaudio
 git+https://github.com/coqui-ai/TTS.git
 
