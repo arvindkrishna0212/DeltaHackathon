@@ -1,0 +1,8 @@
+streamlit
+Pillow
+pytesseract
+PyPDF2
+python-docx
+groq
+TTS
+git+https://github.com/coqui-ai/TTS.git
