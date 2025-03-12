@@ -5,5 +5,5 @@ PyPDF2
 python-docx
 groq
 TTS
-echo y | git+https://github.com/coqui-ai/TTS.git
+git+https://github.com/coqui-ai/TTS.git
 
