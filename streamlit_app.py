@@ -8,6 +8,8 @@ import pytesseract
 import PyPDF2
 from docx import Document
 import streamlit as st
+
+# Automatically agree to Coqui TTS license
 os.environ["COQUI_TOS_AGREED"] = "1"
 
 from TTS.api import TTS
@@ -113,25 +115,22 @@ def main():
             st.write(summary)
 
             with st.spinner("Generating audio..."):
-                # Auto-accept license agreement for TTS
-                process = subprocess.Popen(
-                    ["python", "-c", "from TTS.api import TTS; print('TTS initialized')"],
-                    stdin=subprocess.PIPE,
-                    text=True
-                )
-                process.communicate(input="y\n")
-
                 # Load the TTS model (set gpu=False if no GPU available)
                 tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", progress_bar=False, gpu=False)
                 speaker_wav_path = "sample_speaker.wav"
+
                 if not os.path.exists(speaker_wav_path):
                     st.error("Speaker reference file 'sample_speaker.wav' not found. Please add it to the repository.")
                 else:
-                    tts_output_path = "output.wav"
-                    tts.tts_to_file(text=summary, speaker_wav=speaker_wav_path, language="en", file_path=tts_output_path)
-                    with open(tts_output_path, "rb") as audio_file:
-                        audio_bytes = audio_file.read()
-                    st.audio(audio_bytes, format="audio/wav")
+                    # Generate speech directly into a BytesIO buffer instead of a file
+                    audio_buffer = io.BytesIO()
+                    tts.tts_to_file(text=summary, speaker_wav=speaker_wav_path, language="en", file_path=audio_buffer)
+
+                    # Move the buffer's position to the start
+                    audio_buffer.seek(0)
+
+                    # Play audio in Streamlit
+                    st.audio(audio_buffer, format="audio/wav")
 
 if __name__ == "__main__":
     main()
