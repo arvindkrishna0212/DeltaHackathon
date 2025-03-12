@@ -2,6 +2,7 @@ import os
 import hashlib
 import mimetypes
 import io
+import subprocess
 from PIL import Image
 import pytesseract
 import PyPDF2
@@ -111,6 +112,14 @@ def main():
             st.write(summary)
 
             with st.spinner("Generating audio..."):
+                # Auto-accept license agreement for TTS
+                process = subprocess.Popen(
+                    ["python", "-c", "from TTS.api import TTS; print('TTS initialized')"],
+                    stdin=subprocess.PIPE,
+                    text=True
+                )
+                process.communicate(input="y\n")
+
                 # Load the TTS model (set gpu=False if no GPU available)
                 tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2", progress_bar=False, gpu=False)
                 speaker_wav_path = "sample_speaker.wav"
