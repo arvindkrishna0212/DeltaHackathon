@@ -8,6 +8,7 @@ import pytesseract
 import PyPDF2
 from docx import Document
 import streamlit as st
+os.environ["COQUI_TOS_AGREED"] = "1"
 
 from TTS.api import TTS
 from groq import Groq
