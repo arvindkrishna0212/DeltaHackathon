@@ -48,7 +48,7 @@ os.environ["GROQ_API_KEY"] = GROQ_API_KEY
 client = Groq(api_key=GROQ_API_KEY)
 
 # ---------------------------
-# FileFormat Helper Class
+# FileFormat helper class
 # ---------------------------
 class FileFormat:
     def __init__(self, filename, mime_type, binary, file_hash):
@@ -67,45 +67,40 @@ class FileFormat:
         return cls(filename, mime_type, binary, file_hash)
 
 # ---------------------------
-# Text Extraction Function
+# Text extraction function
 # ---------------------------
-def extract_text_from_file(file_obj, filename, language='eng'):
-    try:
-        file_format = FileFormat.from_file(file_obj, filename)
-        ext = os.path.splitext(file_format.filename)[1].lower()
+def extract_text_from_file(file_obj, filename, strategy='auto', language='eng'):
+    file_format = FileFormat.from_file(file_obj, filename)
+    ext = os.path.splitext(file_format.filename)[1].lower()
 
-        if ext in ['.jpg', '.jpeg', '.png', '.bmp', '.tiff']:
-            st.info(f"Processing image file: {file_format.filename} using OCR")
-            image = Image.open(io.BytesIO(file_format.binary))
-            text = pytesseract.image_to_string(image, lang=language)
-            return text
+    if ext in ['.jpg', '.jpeg', '.png', '.bmp', '.tiff']:
+        st.info(f"Processing image file: {file_format.filename} using OCR")
+        image = Image.open(io.BytesIO(file_format.binary))
+        text = pytesseract.image_to_string(image, lang=language)
+        return text
 
-        elif ext == '.pdf':
-            st.info(f"Processing PDF file: {file_format.filename} using PDF extraction")
-            text = ""
-            with io.BytesIO(file_format.binary) as pdf_file:
-                reader = PyPDF2.PdfReader(pdf_file)
-                for page in reader.pages:
-                    page_text = page.extract_text()
-                    if page_text:
-                        text += page_text + "\n"
-            if not text.strip():
-                text = "No extractable text found in PDF. It may be a scanned document."
-            return text
+    elif ext == '.pdf':
+        st.info(f"Processing PDF file: {file_format.filename} using PDF extraction")
+        text = ""
+        with io.BytesIO(file_format.binary) as pdf_file:
+            reader = PyPDF2.PdfReader(pdf_file)
+            for page in reader.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text + "\n"
+        if not text.strip():
+            text = "No extractable text found in PDF. It may be a scanned document."
+        return text
 
-        elif ext == '.docx':
-            st.info(f"Processing DOCX file: {file_format.filename} using DOCX extraction")
-            with io.BytesIO(file_format.binary) as docx_file:
-                document = Document(docx_file)
-                text = "\n".join(paragraph.text for paragraph in document.paragraphs)
-            return text
+    elif ext == '.docx':
+        st.info(f"Processing DOCX file: {file_format.filename} using DOCX extraction")
+        with io.BytesIO(file_format.binary) as docx_file:
+            document = Document(docx_file)
+            text = "\n".join(paragraph.text for paragraph in document.paragraphs)
+        return text
 
-        else:
-            return f"Unsupported file format: {ext}"
-    except Exception as e:
-        st.error(f"Error extracting text: {str(e)}")
-        logger.error(f"Text extraction error: {str(e)}", exc_info=True)
-        return f"Error processing file: {str(e)}"
+    else:
+        return f"Unsupported file format: {ext}"
 
 # ---------------------------
 # Text-to-Speech Function
