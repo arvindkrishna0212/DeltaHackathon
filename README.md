@@ -1,5 +1,7 @@
 # AI Voice Reporter
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1k4oZoTha0xxtT-zHzLd_q7UVtNOEMVSJ?usp=sharing)
+
 ## Overview
 
 This application is a powerful document processing tool that extracts text from various file formats, performs AI-powered summarization, and provides text-to-speech capabilities. Built for Jupyter Notebook environments, it combines optical character recognition (OCR), document parsing, Large Language Model (LLM) summarization, and speech synthesis into a single, user-friendly interface.
@@ -203,21 +205,3 @@ language_dropdown = widgets.Dropdown(
    - Extract entities, sentiment, and key points
    - Visualize document statistics
 
-## Security Considerations
-
-1. The application processes files locally within the Jupyter environment
-2. API keys should be stored securely, not hardcoded in notebooks
-3. Consider implementing file scanning for production use
-4. Be aware of data privacy when sending content to external APIs
-
-## License & Attribution
-
-This code is provided for educational purposes. When using in production:
-
-1. Respect the terms of service for all APIs (Groq)
-2. Ensure compliance with Tesseract OCR license (Apache 2.0)
-3. Check TTS model licensing for commercial applications
-
----
-
-*Created: March 13, 2025*
