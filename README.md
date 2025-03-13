@@ -1,7 +1,5 @@
 # AI Voice Reporter
 
-![Document Processing](https://i.imgur.com/placeholder.png)
-
 ## Overview
 
 This application is a powerful document processing tool that extracts text from various file formats, performs AI-powered summarization, and provides text-to-speech capabilities. Built for Jupyter Notebook environments, it combines optical character recognition (OCR), document parsing, Large Language Model (LLM) summarization, and speech synthesis into a single, user-friendly interface.
@@ -21,6 +19,7 @@ This application is a powerful document processing tool that extracts text from 
 
 ```
 pip install os-sys hashlib mimetypes ipywidgets Pillow pytesseract PyPDF2 python-docx groq TTS
+pip install git+https://github.com/coqui-ai/TTS.git
 ```
 
 ### External Dependencies
